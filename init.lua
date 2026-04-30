@@ -76,6 +76,9 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
+-- Terminal Gui colours
+vim.opt.termguicolors = true
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -398,7 +401,10 @@ require('lazy').setup({
       -- Automatically install LSPs and related tools to stdpath for Neovim
       -- Mason must be loaded before its dependents so we need to set it up here.
       -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
-      { 'williamboman/mason.nvim', opts = {} },
+      { 'williamboman/mason.nvim', opts = {}, dependencies = {
+        'williamboman/mason.nvim',
+        'neovim/nvim-lspconfig',
+      } },
       'williamboman/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
@@ -601,6 +607,9 @@ require('lazy').setup({
       --
       -- You can add other tools here that you want Mason to install
       -- for you, so that they are available from within Neovim.
+
+      pcall(require, 'lspconfig')
+
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
@@ -608,6 +617,7 @@ require('lazy').setup({
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       require('mason-lspconfig').setup {
+        automatic_enable = false,
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
@@ -664,7 +674,6 @@ require('lazy').setup({
       },
     },
   },
-
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',
@@ -890,7 +899,10 @@ require('lazy').setup({
   require 'kickstart.plugins.lint',
 
   -- NOTE: Add new plugins here
-  require 'minh.plugins.alpha-nvim',
+
+  -- require 'minh.plugins.alpha-nvim',
+  require 'minh.plugins.milli',
+  require 'minh.plugins.dashboard',
   require 'minh.plugins.completions',
   require 'minh.plugins.neoscroll',
   require 'minh.plugins.tmux-nav',

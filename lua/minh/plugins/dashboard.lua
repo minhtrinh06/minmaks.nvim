@@ -1,0 +1,25 @@
+return {
+  'nvimdev/dashboard-nvim',
+  event = 'VimEnter',
+  dependencies = {
+    'amansingh-afk/milli.nvim',
+    'nvim-tree/nvim-web-devicons',
+  },
+  opts = function()
+    local splash = require('milli').load { splash = 'finger' }
+    return {
+      theme = 'doom',
+      config = {
+        header = splash.frames[1], -- seed header with frame 0
+        center = {
+          { icon = '  ', desc = 'Find File', key = 'f', action = 'Telescope find_files' },
+          { icon = '  ', desc = 'Quit', key = 'q', action = 'qa' },
+        },
+      },
+    }
+  end,
+  config = function(_, opts)
+    require('dashboard').setup(opts)
+    require('milli').dashboard { splash = 'finger', loop = true }
+  end,
+}
