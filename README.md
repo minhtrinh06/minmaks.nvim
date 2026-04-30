@@ -1,4 +1,6 @@
-# kickstart.nvim
+# minmaks.nvim
+
+My fork of kickstart.nvim
 
 ## Introduction
 
