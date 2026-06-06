@@ -1,3 +1,4 @@
+local splash_theme = 'lights'
 return {
   'nvimdev/dashboard-nvim',
   event = 'VimEnter',
@@ -6,7 +7,7 @@ return {
     'nvim-tree/nvim-web-devicons',
   },
   opts = function()
-    local splash = require('milli').load { splash = 'finger' }
+    local splash = require('milli').load { splash = splash_theme }
     return {
       theme = 'doom',
       config = {
@@ -20,6 +21,6 @@ return {
   end,
   config = function(_, opts)
     require('dashboard').setup(opts)
-    require('milli').dashboard { splash = 'finger', loop = true }
+    require('milli').dashboard { splash = splash_theme, loop = true }
   end,
 }
