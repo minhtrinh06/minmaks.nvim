@@ -869,9 +869,7 @@ require('lazy').setup({
   },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
-    branch = 'master',
     build = ':TSUpdate',
-    main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
       ensure_installed = {
@@ -895,6 +893,23 @@ require('lazy').setup({
       highlight = { enable = true },
       indent = { enable = true },
     },
+    config = function(_, opts)
+      local module_names = {
+        'nvim-treesitter',
+        'nvim-treesitter.config',
+        'nvim-treesitter.configs',
+      }
+
+      for _, module_name in ipairs(module_names) do
+        local ok, module = pcall(require, module_name)
+        if ok and type(module.setup) == 'function' then
+          module.setup(opts)
+          return
+        end
+      end
+
+      error('Unable to find a compatible nvim-treesitter setup module')
+    end,
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
     --
